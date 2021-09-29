@@ -1,13 +1,13 @@
-const connection = require('../app/database')
+const connection = require('../app/database');
 // const sqlFragment = `
 
 // `
 
 class MomentService {
   async create(userId, content) {
-    const statement = `INSERT INTO moment (content, user_id) VALUES (?, ?);`
-    const [result] = await connection.execute(statement, [content, userId])
-    return result
+    const statement = `INSERT INTO moment (content, user_id) VALUES (?, ?);`;
+    const [result] = await connection.execute(statement, [content, userId]);
+    return result;
   }
 
   async getMomentById(momentId) {
@@ -30,9 +30,9 @@ class MomentService {
       LEFT JOIN label l ON ml.label_id = l.id
       WHERE m.id = ?
       GROUP BY m.id;
-    `
-    const [result] = await connection.execute(statement, [momentId])
-    return result[0]
+    `;
+    const [result] = await connection.execute(statement, [momentId]);
+    return result[0];
   }
 
   async getMomentList(offset, size) {
@@ -46,34 +46,34 @@ class MomentService {
         FROM file WHERE m.id = file.moment_id) images
         FROM moment m
 				LEFT JOIN users u ON m.user_id = u.id LIMIT ?, ?;
-    `
-    const [result] = await connection.execute(statement, [offset, size])
-    return result
+    `;
+    const [result] = await connection.execute(statement, [offset, size]);
+    return result;
   }
 
   async updateMoment(content, momentId) {
-    const statement = `UPDATE moment set content = ? where id = ?;`
-    const [result] = await connection.execute(statement, [content, momentId])
-    return result
+    const statement = `UPDATE moment set content = ? where id = ?;`;
+    const [result] = await connection.execute(statement, [content, momentId]);
+    return result;
   }
 
   async removeMoment(momentId) {
-    const statement = `DELETE FROM moment WHERE id = ?;`
-    const [result] = await connection.execute(statement, [momentId])
-    return result
+    const statement = `DELETE FROM moment WHERE id = ?;`;
+    const [result] = await connection.execute(statement, [momentId]);
+    return result;
   }
 
   async hasLabel(momentId, label) {
-    const statement = `SELECT * FROM moment_label WHERE moment_id = ? AND label_id = ?;`
-    const [result] = await connection.execute(statement, [momentId, label])
-    return result[0] ? true : false
+    const statement = `SELECT * FROM moment_label WHERE moment_id = ? AND label_id = ?;`;
+    const [result] = await connection.execute(statement, [momentId, label]);
+    return result[0] ? true : false;
   }
 
   async addLabel(momentId, label) {
-    const statement = `INSERT INTO moment_label (moment_id, label_id) VALUES (?, ?)`
-    const [result] = await connection.execute(statement, [momentId, label])
-    return result
+    const statement = `INSERT INTO moment_label (moment_id, label_id) VALUES (?, ?)`;
+    const [result] = await connection.execute(statement, [momentId, label]);
+    return result;
   }
 }
 
-module.exports = new MomentService()
+module.exports = new MomentService();
